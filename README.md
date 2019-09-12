@@ -29,7 +29,7 @@ If they are the same, store it in retrieved_regular directory, else, in the retr
 #### On the test data  
 run the main.py file.  
 #### On your own data  
-reset video_path in main.py(line ) to be your own video path,  
+reset video_path in main.py(line 12) to be your own video path,  
 build a directory called images_to_be_retrieved which store your own images.  
     (It should be under the same parent directory with video path)  
 run the main.py file  
