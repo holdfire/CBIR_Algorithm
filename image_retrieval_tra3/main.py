@@ -15,7 +15,7 @@ if __name__ == '__main__':
 	"C:\\Users\\Dell\\Desktop\\omi_ori_data\\omi_ori_data\\17_f0c2ecd2cd4446c5ba30edcf8499dc7a\\17_taskDown\\17_d22f9dff-581c-4d90-9630-9a6c340e8783.mp4", \
 	"C:\\Users\\Dell\\Desktop\\omi_ori_data\\omi_ori_data\\14_e965d138d513419e8c9a5da68466f082\\14_taskDown\\14_96666c3e-87cf-4959-9d5f-e39782701549.mp4", \
 	"C:\\Users\\Dell\\Desktop\\omi_ori_data\\omi_ori_data\\2_e8c6796f6a234f33a4d06df12e477330\\2_taskDown\\2_4da68e60-fff2-4179-bb90-a623fd7bb286.mp4"]\
-		[5]
+		[2]
 	obj_video = video2Images(video_path)
 	video_images_dir = obj_video.toImages()
 	# video_images_dir = os.path.join(os.path.dirname(video_path), "images_from_video")
