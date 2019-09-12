@@ -17,7 +17,7 @@ image_query: For image to be retrieved, search the most similar image in the vid
 ## 3. Process  
 #### STEP1: Frame the video.  
 The result will be stored in a new directory called images_from_video  
-##### STEP2: Hash all images in images_from_video.  
+#### STEP2: Hash all images in images_from_video.  
 The reult was stored in a file called images_hash_table.pkl   
 #### STEP3: Query images in images_to_be_retrieved.  
 Build two new directories called retrieved_regular and retrieved_irregular.  
