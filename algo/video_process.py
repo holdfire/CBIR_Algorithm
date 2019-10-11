@@ -1,5 +1,6 @@
 import cv2
 import os
+import time
 
 class video2Images:
 	def __init__(self, video_path):
@@ -25,4 +26,17 @@ class video2Images:
 			image_path = os.path.join(self.images_from_video, os.path.basename(self.video_path) + "_" + str(count) + ".jpg")
 			cv2.imwrite(image_path, image)
 		return self.images_from_video
+
+if __name__ == '__main__':
+	# STEP1: process the video to produce pictures
+	time_start = time.perf_counter()
+	video_path = ""
+	obj_video = video2Images(video_path)
+	video_images_dir = obj_video.toImages()
+	# video_images_dir = os.path.join(os.path.dirname(video_path), "images_from_video")
+	time_end1 = time.perf_counter()
+	print("STEP 1: It cost %d s to frame the video !" % (time_end1 - time_start))
+
+
+
 
