@@ -1,6 +1,6 @@
 import cv2
 import os
-import time
+import csv
 
 class video2Images:
 	def __init__(self, video_path):
@@ -9,7 +9,7 @@ class video2Images:
 		if not os.path.exists(self.images_from_video):
 			os.makedirs(self.images_from_video)
 
-	def toImages(self, frame_interval = 3, resize = False, new_size = (128,128)):
+	def toImages(self, frame_interval = 3, resize = False, new_size = (256, 256)):
 		video = cv2.VideoCapture(self.video_path)
 		count = 0
 		rval = video.isOpened()
@@ -28,14 +28,14 @@ class video2Images:
 		return self.images_from_video
 
 if __name__ == '__main__':
-	# STEP1: process the video to produce pictures
-	time_start = time.perf_counter()
+
+
+	exist_video = csv.reader(".//data//exist_video_name")
+
+
 	video_path = ""
 	obj_video = video2Images(video_path)
 	video_images_dir = obj_video.toImages()
-	# video_images_dir = os.path.join(os.path.dirname(video_path), "images_from_video")
-	time_end1 = time.perf_counter()
-	print("STEP 1: It cost %d s to frame the video !" % (time_end1 - time_start))
 
 
 
