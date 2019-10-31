@@ -1,13 +1,16 @@
 import cv2
+import os
+import time
 import numpy as np
-import matplotlib.pyplot as plt
-from image_preprocess import preprocessImage
 
-class extractImageFeatures:
+class hashImage:
 
 	def __init__(self, image):
-		# - parameter: an image read by cv2.imread()
 		self.image = image
+
+	def resize(self, new_size = (128, 128)):
+		self.image = cv2.resize(self.image, new_size, interpolation=cv2.INTER_CUBIC)
+		return self.image
 
 	def dHash(self, hash_size=(17, 16)):
 		gray_image = cv2.cvtColor(self.image, cv2.COLOR_BGR2GRAY)
@@ -40,9 +43,9 @@ class extractImageFeatures:
 					s[i][j] = 0
 					v[i][j] = 255
 				# 借助上述hsv映射关系，将hsv色彩空间转换为[8, 3, 3]维的空间
-				h[i][j] = extractImageFeatures.Hue_list[h[i][j]]
-				s[i][j] = extractImageFeatures.Saturation_list[s[i][j]]
-				v[i][j] = extractImageFeatures.Value_list[v[i][j]]
+				h[i][j] = hashImage.Hue_list[h[i][j]]
+				s[i][j] = hashImage.Saturation_list[s[i][j]]
+				v[i][j] = hashImage.Value_list[v[i][j]]
 				hsv_matrix[i][j] = 9*h[i][j] + 3*s[i][j] + v[i][j]
 				hsv_matrix = np.array(hsv_matrix, dtype=np.uint8)
 		recoded_hsvHist = cv2.calcHist([hsv_matrix], [0], None, [72], [0, 72]).reshape((1,-1))[0]
@@ -90,63 +93,32 @@ class extractImageFeatures:
 				cls.Value_list[i] = 2
 		return cls.Hue_list,cls.Saturation_list,cls.Value_list
 
-	@staticmethod
-	def smoothHist(hist, loop = False):
-		new_hist = np.zeros((len(hist)))
-		for i in range(len(hist)):
-			if i == 0:
-				if loop:
-					new_hist[i] = (hist[len(hist)-1] + hist[0] + hist[1]) / 3
-				else:
-					new_hist[i] = (hist[0] + hist[1]) / 2
-			if i == len(hist)-1:
-				if loop:
-					new_hist[i] = (hist[i-1] + hist[i] + hist[0]) / 3
-				else:
-					new_hist[i] = (hist[i-1] + hist[i]) / 2
-			else:
-				new_hist[i] = (hist[i-1] + hist[i] + hist[i+1])/3
-		return new_hist
+def get_hash_str(image_path):
+	'''
+	:param image_path: image_path
+	:return: a tuple, the length of the tuple is 72
+	'''
+	# initialize Hue_list, Saturation_list and Value_list
+	hashImage.hsv_map()
+	image = cv2.imread(image_path)
+	obj = hashImage(image)
+	# resize the image into a standard size
+	obj.resize()
+	# generate the hash string of the image
+	hash_str = obj.hsvHist()
+	return hash_str
 
 
-if __name__ == "__main__":
-	# testing code
-	def cmpHash_str(hash_str1, hash_str2):
-		n = 0
-		if len(hash_str1) != len(hash_str2):
-			raise Exception("The input hash strings do not match")
-		for i in range(len(hash_str1)):
-			if hash_str1[i] != hash_str2[i]:
-				n = n + 1
-		score = 1 - n / len(hash_str1)
-		return score
-	def cmpHist(hist1, hist2):
-		if not len(hist1) == len(hist2):
-			raise Exception("The input hist length should be the same")
-		inter = 0.0
-		total = 0.01
-		for i in range(len(hist1)):
-			inter = inter + min(hist1[i], hist2[i])
-			total = total + max(hist1[i], hist2[i])
-		score = inter / total
-		return score
-	path1 = "C:\\Users\\Dell\\Desktop\\omi_ori_data\\3a.jpg"
-	path2 = "C:\\Users\\Dell\\Desktop\\omi_ori_data\\3b.jpg"
-
-	image1 = cv2.imread(path1)
-	obj1_prepro = preprocessImage(image1)
-	obj1_prepro.resize_image()
-	obj1_prepro.mask_image()
-	obj1_extract = extractImageFeatures(obj1_prepro.image)
-	extractImageFeatures.hsv_map()
-	recoded_hsvHist1 = obj1_extract.hsvHist()
-
-	image2 = cv2.imread(path2)
-	obj2_prepro = preprocessImage(image2)
-	obj2_prepro.resize_image()
-	obj2_prepro.mask_image()
-	obj2_extract = extractImageFeatures(obj2_prepro.image)
-	extractImageFeatures.hsv_map()
-	recoded_hsvHist2 = obj2_extract.hsvHist()
-	print(cv2.compareHist(recoded_hsvHist1, recoded_hsvHist2, cv2.HISTCMP_INTERSECT) / np.sum(recoded_hsvHist1))
+# if __name__ == "__main__":
+# 	# testing
+# 	dir = "../tmp/queryImage/query1"
+# 	paths = os.listdir(dir)
+# 	hash_list = []
+# 	time_start = time.perf_counter()
+# 	for i in paths:
+# 		image_path = os.path.join(dir, i)
+# 		hash_str = get_hash_str(image_path)
+# 		hash_list.append(hash_str)
+# 	time_end1 = time.perf_counter()
+# 	print("It cost %d s !" % (time_end1 - time_start))
 
