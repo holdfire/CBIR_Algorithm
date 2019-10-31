@@ -1,15 +1,21 @@
-## 1. Introduction
+#### 1. Introduction
 This is an image retrieval project.  
-We aim to search for the most similar image in some videos, compared with the queried image.   
-The image library is composed of images from some adds videos.    
-The query images are some screenshots from internet.  
-![Alt](./tools/pics/image_retrieval_flowchart.png)
-  
-## 2.Tools  
-python 3,   
-opencv 3,   
-fiass    
+for a queried image, we want to search the most similar image in the image library.
++ Offline Operation:  
+Extracting feature vector of each image in the image library.  
+Constructing inverted index of these vectors.
++ Online Operation:  
+Extracting feature vector of queried image.  
+Searching the most similar image in image library, return its index.  
 
-## 3. Modules   
+
+![Alt](./flowchart.png)
+  
+#### 2.Tools  
+python 3,   
+opencv 4,   
+faiss 1.6    
+tensorflow 1.12
+
  
  

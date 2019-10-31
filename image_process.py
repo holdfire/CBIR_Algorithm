@@ -1,9 +1,9 @@
 import cv2
+import numpy as np
 import os
 import time
-import numpy as np
 
-class hashImage:
+class processImage:
 
 	def __init__(self, image):
 		self.image = image
@@ -43,15 +43,15 @@ class hashImage:
 					s[i][j] = 0
 					v[i][j] = 255
 				# 借助上述hsv映射关系，将hsv色彩空间转换为[8, 3, 3]维的空间
-				h[i][j] = hashImage.Hue_list[h[i][j]]
-				s[i][j] = hashImage.Saturation_list[s[i][j]]
-				v[i][j] = hashImage.Value_list[v[i][j]]
+				h[i][j] = processImage.Hue_list[h[i][j]]
+				s[i][j] = processImage.Saturation_list[s[i][j]]
+				v[i][j] = processImage.Value_list[v[i][j]]
 				hsv_matrix[i][j] = 9*h[i][j] + 3*s[i][j] + v[i][j]
 				hsv_matrix = np.array(hsv_matrix, dtype=np.uint8)
 		recoded_hsvHist = cv2.calcHist([hsv_matrix], [0], None, [72], [0, 72]).reshape((1,-1))[0]
 		return recoded_hsvHist
 
-	# 下面是一些辅助函数，被声明为类的方法或静态方法
+	# assistant variable or method
 	Hue_list = []
 	Saturation_list = []
 	Value_list = []
@@ -99,9 +99,9 @@ def get_hash_str(image_path):
 	:return: a tuple, the length of the tuple is 72
 	'''
 	# initialize Hue_list, Saturation_list and Value_list
-	hashImage.hsv_map()
+	processImage.hsv_map()
 	image = cv2.imread(image_path)
-	obj = hashImage(image)
+	obj = processImage(image)
 	# resize the image into a standard size
 	obj.resize()
 	# generate the hash string of the image

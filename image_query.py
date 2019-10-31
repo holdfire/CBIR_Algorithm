@@ -67,7 +67,7 @@ if __name__ == "__main__":
 	xq = np.random.random((nq, d)).astype('float32')
 	xq[:, 0] += np.arange(nq) / 1000.
 
-	#print(faiss_search(xb[1], xb, 4))
+	print(faiss_search(xb[1], xb, 4))
 	print(sequential_search(xb[4], xb))
 
 
