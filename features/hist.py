@@ -75,3 +75,10 @@ class Hist:
                 cls.Value_list[i] = 2
         return cls.Hue_list, cls.Saturation_list, cls.Value_list
 
+if __name__ == "__main__":
+    image_path = "../data/query.jpg"
+    image = cv2.imread(image_path)
+    Hist.hsv_map()
+    obj = Hist(image)
+    vec = obj.hsv_hist()
+    print(vec)

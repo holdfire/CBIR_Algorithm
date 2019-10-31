@@ -38,4 +38,9 @@ class Hashing:
                     pHash_str = pHash_str + '0'
         return pHash_str
 
-
+if __name__ == "__main__":
+    image_path = "../data/query.jpg"
+    image = cv2.imread(image_path)
+    obj = Hashing(image)
+    vec = obj.dHash()
+    print(vec)

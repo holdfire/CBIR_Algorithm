@@ -14,7 +14,7 @@ opencv 4,
 faiss 1.6    
 tensorflow 1.12
 
-### Quick Start
+### 3. Quick Start
 ```
 
 ```
