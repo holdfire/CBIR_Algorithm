@@ -1,7 +1,13 @@
 import cv2
 import numpy as np
 
+
 class Hist:
+    '''
+    Introduction: Using the following methods, we can get a histogram description of for given image.
+    hsv hist is suggested.
+    gray hist, rgb hist are not suggested, as they are not so variant.
+    '''
     def __init__(self, image):
         self.image = image
 
