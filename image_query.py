@@ -14,9 +14,13 @@ def faiss_search(x_query, x_base, top_k = 4, score_threshold = 0.8):
 		raise Exception("The input query vector is empty!")
 	if len(x_query) != x_base.shape[1]:
 		raise Exception("The query vector does not match the base vector")
-	dim = len(x_query)  # the dimension of a single query vector
-	index = faiss.IndexFlatL2(dim)  # build the index
-	index.add(x_base)  # add vectors to the index
+	# the dimension of a single query vector
+	dim = len(x_query)
+	# Build inverted indexing. brute force search by comparing euclidean distance
+	# if you have a GPU, use faiss.GPUIndexFlatL2()
+	index = faiss.IndexFlatL2(dim)
+	# add vectors to the index
+	index.add(x_base)
 	# convert x_query into numpy.ndarray type
 	x_q = np.array([x_query])
 	Distance, Index = index.search(x_q, top_k)
