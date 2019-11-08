@@ -2,13 +2,18 @@ import cv2
 import numpy as np
 
 
-class LocalFeatures():
+class LocalFeature():
     def __init__(self,image_path):
         self.image = cv2.imread(image_path)
 
     def get_features(self, method = "ORB", MAX_FEATURES = 6000):
+        '''
+        You can get keypoints and descriptors of image, and choose different kinds of feature.
+        For SIFT and SURF feature, OpenCV no longer supports api.
+        You can uninstall OpenCV, and install opencv-contrib-python3.4.2 in python
+        :return: kepoints, descriptors
+        '''
         gray_image = cv2.cvtColor(self.image, cv2.COLOR_BGR2GRAY)
-        # get keypoints and descriptors of image, we can choose the following methods
         if method == "SIFT":
             sift = cv2.xfeatures2d.SIFT_create()
             keypoints, descriptors = sift.detectAndCompute(gray_image, None)
@@ -31,15 +36,15 @@ class alignImages():
 
     def matchImages(self, GOOD_MATCH_PERCENT=0.2):
         # get keypoints and descriptors of two images
-        local1 = LocalFeatures(self.image_path1)
+        local1 = LocalFeature(self.image_path1)
         keypoints1, descriptors1 = local1.get_features()
-        local2 = LocalFeatures(self.image_path2)
+        local2 = LocalFeature(self.image_path2)
         keypoints2, descriptors2 =  local2.get_features()
 
         # the matcher rely on the descriptors type
         matcher = cv2.DescriptorMatcher_create(cv2.DESCRIPTOR_MATCHER_BRUTEFORCE)
         matches = matcher.match(descriptors1, descriptors2, None)
-        # Sort matches by score
+        # Sort matches by distance
         matches.sort(key=lambda x: x.distance, reverse=False)
         # Remove not so good matches
         numGoodMatches = int(len(matches) * GOOD_MATCH_PERCENT)
@@ -58,7 +63,7 @@ class alignImages():
             points1[i, :] = keypoints1[match.queryIdx].pt
             points2[i, :] = keypoints2[match.trainIdx].pt
 
-        # Find homography
+        # Find homography by RANSAC
         h, mask = cv2.findHomography(points1, points2, cv2.RANSAC)
         # Use homography, image1为被对齐的图片
         height, width, channels = image2.shape

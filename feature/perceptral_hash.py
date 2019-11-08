@@ -2,8 +2,8 @@ import cv2
 import numpy as np
 
 class Hashing:
-    def __init__(self, image):
-        self.image = image
+    def __init__(self, image_path):
+        self.image = cv2.imread(image_path)
 
     def dHash(self, hash_size=(17, 16)):
         gray_image = cv2.cvtColor(self.image, cv2.COLOR_BGR2GRAY)
@@ -38,9 +38,19 @@ class Hashing:
                     pHash_str = pHash_str + '0'
         return pHash_str
 
+    def cmpHash(self, hash_str1, hash_str2):
+        n = 0
+        if len(hash_str1) != len(hash_str2):
+            raise Exception("The input hash strings do not match")
+        for i in range(len(hash_str1)):
+            if hash_str1[i] != hash_str2[i]:
+                n = n + 1
+        score = 1 - n / len(hash_str1)
+        return score
+
 if __name__ == "__main__":
     image_path = "../data/query.jpg"
-    image = cv2.imread(image_path)
-    obj = Hashing(image)
+    obj = Hashing(image_path)
     vec = obj.dHash()
     print(vec)
+
