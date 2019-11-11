@@ -2,7 +2,7 @@ import cv2
 import os
 
 
-def video2Images(video_path, frame_interval=3, resize=False, new_size=(128, 128)):
+def Video2Images(video_path, frame_interval=3, resize=False, new_size=(128, 128)):
 	# build a directory to store images
 	images_dir = os.path.join(os.path.dirname(video_path), 'images_dir')
 	os.makedirs(images_dir)
