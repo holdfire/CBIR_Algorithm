@@ -55,6 +55,7 @@ class ColorHist:
 
 
 if __name__ == "__main__":
+    # testing code
     path = "../data/imageLib/"
 
     start = time.perf_counter()
