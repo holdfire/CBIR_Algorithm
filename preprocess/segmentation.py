@@ -13,7 +13,7 @@ class SegByContour():
         Attention：广告图片质量非常好，没有噪点。不应该做高斯滤波，做了效果反而不好。可以自己设置滤波器做优化
         :return: 原图像的top_k个子图的轮廓，其中子图为矩形
         '''
-        # 将原图的4个边缘填充白色像素
+        # 将原图的4个边缘填充白色像素，不做padding的话，原图的边界检测不出来
         padded_image = cv2.copyMakeBorder(self.image, padding, padding, padding, padding, cv2.BORDER_CONSTANT, value = [255,255,255])
         # 再处理成灰度图
         gray_image = cv2.cvtColor(padded_image, cv2.COLOR_BGR2GRAY)
@@ -28,7 +28,7 @@ class SegByContour():
             contours_area.append(cv2.contourArea(contours[i]))
         # 找到面积最大的前k+1个轮廓的索引，为什么是k+1呢？看下面的注释
         top_k_index = np.argsort(contours_area)[: :-1][:top_k+1]
-        # 如果子图中包含整张图，应该将其去掉
+        # 如果子图中包含原图，应该将其去掉
         if cv2.contourArea(contours[top_k_index[0]]) > self.image.shape[0] * self.image.shape[1]:
             top_k_index = top_k_index[1:]
         else:
