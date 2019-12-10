@@ -1,6 +1,6 @@
 import cv2
 import os
-import time
+import pickle
 import numpy as np
 
 
@@ -10,7 +10,7 @@ class ColorHist:
     hsv hist is suggested.
     gray hist, rgb hist are not suggested, as they are not so variant.
     '''
-    def __init__(self, image_path, new_size=(128, 128)):
+    def __init__(self, image_path, new_size=(180, 320)):
         self.image = cv2.imread(image_path)
         self.image = cv2.resize(self.image, new_size, interpolation=cv2.INTER_CUBIC)
 
@@ -23,8 +23,8 @@ class ColorHist:
         # 对hsv色彩空间的h, s, v三个通道分别进行映射
         self.hsv_mapping(h, s, v)
         hsv_matrix = np.array(9 * h + 3 * s + v, dtype=np.uint8)
-        mapped_hsv_hist = cv2.calcHist([hsv_matrix], [0], None, [72], [0, 72]).reshape((1, -1))[0]
-        return mapped_hsv_hist
+        hsv_hist = cv2.calcHist([hsv_matrix], [0], None, [72], [0, 72]).reshape((1, -1))[0]
+        return hsv_hist
 
     def hsv_mapping(self, h, s, v):
         # 对hsv图像先做预处理，接近黑色的均设为黑色
@@ -55,17 +55,46 @@ class ColorHist:
 
 
 if __name__ == "__main__":
-    # testing code
-    path = "../data/imageLib/"
+    #
+    # # 将素材库的所有图片生成特征向量
+    # os.chdir("../data/online/img_lib/")
+    # # 两个list，分别保存图片名称和图片hsv色彩空间值
+    # vector_image_path = []
+    # vector_hsv_hist = []
+    #
+    # # 逐张读取图片并得到其hsv直方图向量
+    # for image_path in os.listdir(os.getcwd()):
+    #     obj = ColorHist(image_path)
+    #     vec = obj.hsv_hist()
+    #     vector_image_path.append(image_path)
+    #     vector_hsv_hist.append(vec)
+    #
+    # # 保存所有图片路径和所有直方图向量
+    # with open(os.path.join('../', "image_path.pkl"), "wb+") as f:
+    #     pickle.dump(vector_image_path, f)
+    # with open(os.path.join('../', "hsv_hist.pkl"), "wb+") as f:
+    #     pickle.dump(vector_hsv_hist, f)
 
-    start = time.perf_counter()
-    os.chdir(path)
-    for image in os.listdir(os.getcwd()):
-        image = cv2.imread(image)
-        image = cv2.resize(image,(128,128))
-        obj = ColorHist(image)
+
+
+    # 将待查询的所有图片生成特征向量
+    os.chdir("../data/online/queries_processed/")
+    # 两个list，分别保存图片名称和图片hsv色彩空间值
+    vector_image_path = []
+    vector_hsv_hist = []
+
+    # 逐张读取图片并得到其hsv直方图向量
+    for image_path in os.listdir(os.getcwd()):
+        obj = ColorHist(image_path)
         vec = obj.hsv_hist()
-        print('hi')
-    end = time.perf_counter()
-    print(end-start)
+        vector_image_path.append(image_path)
+        vector_hsv_hist.append(vec)
+
+    # 保存所有图片路径和所有直方图向量
+    with open(os.path.join('../', "queries_image_path.pkl"), "wb+") as f:
+        pickle.dump(vector_image_path, f)
+    with open(os.path.join('../', "queries_hsv_hist.pkl"), "wb+") as f:
+        pickle.dump(vector_hsv_hist, f)
+
+
 
