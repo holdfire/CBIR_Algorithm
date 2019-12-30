@@ -245,7 +245,7 @@ def Hough_Line(edge, img):
 
 
 # Read image
-img = cv2.imread("../data/test/1-001.png").astype(np.float32)
+img = cv2.imread("../data/online/test/001.png").astype(np.float32)
 
 # Canny
 edge, angle = Canny(img)

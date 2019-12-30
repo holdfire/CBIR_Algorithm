@@ -7,7 +7,7 @@ Constructing inverted index of these vectors.
 + Online Operation:  
 Extracting feature vector of queried image.  
 Searching the most similar image in image library, return its index.  
-![Alt](tools/pics/flowchart.png)
+![Alt](tools/help/flowchart.png)
 ### 2.Tools  
 python 3,   
 opencv 4,   

@@ -3,8 +3,10 @@ import cv2
 import numpy as np
 
 
-img = cv2.imread("../data/test/1-001.png")
+img = cv2.imread("../data/online/test/002.png")
 gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
+cv2.imwrite("gray.jpg", img)
+
 width, height = gray.shape
 
 
