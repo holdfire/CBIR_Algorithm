@@ -5,14 +5,14 @@ import numpy as np
 
 img = cv2.imread("../data/online/test/002.png")
 gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
-cv2.imwrite("gray.jpg", img)
+cv2.imwrite("gray.jpg", gray)
 
 width, height = gray.shape
 
 
 # Canny edge detection
 edge = cv2.Canny(gray, 20, 50)
-# cv2.imwrite("edge_opencv_canny.jpg", edge)
+cv2.imwrite("edge_opencv_canny.jpg", edge)
 # cv2.waitKey(10)
 
 # Hough transformaiton to detect lines
